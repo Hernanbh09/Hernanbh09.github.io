@@ -13,37 +13,22 @@
             --success: #10b981;
             --danger: #ef4444;
             --warning: #f59e0b;
+            --info: #3b82f6;
             --bg: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            padding: 20px;
-            overflow-x: hidden;
-        }
+        body { background-color: var(--bg); color: var(--text-main); padding: 20px; overflow-x: hidden; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1000px; margin: 0 auto; }
 
-        header {
-            margin-bottom: 30px;
-            text-align: center;
-        }
+        header { margin-bottom: 30px; text-align: center; }
 
-        /* --- Dashboard de Resumen --- */
+        /* --- Dashboard --- */
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -56,64 +41,18 @@
             padding: 20px;
             border-radius: 16px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
         }
 
-        .card h3 {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .card .amount {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
+        .card h3 { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 8px; }
+        .card .amount { font-size: 1.5rem; font-weight: 700; }
 
         .border-fixed { border-left: 5px solid var(--primary); }
         .border-savings { border-left: 5px solid var(--success); }
-        .border-emergency { border-left: 5px solid var(--warning); }
         .border-wants { border-left: 5px solid #a855f7; }
 
-        /* --- Barra de Progreso --- */
-        .budget-progress-container {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .progress-bar-bg {
-            background: #e2e8f0;
-            height: 12px;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            background: var(--primary);
-            height: 100%;
-            width: 75%;
-            transition: width 1s ease;
-        }
-
-        /* --- Formulario y Lista --- */
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 30px;
-        }
-
-        @media (max-width: 768px) {
-            .main-content { grid-template-columns: 1fr; }
-        }
+        /* --- Formulario --- */
+        .main-content { display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
+        @media (max-width: 768px) { .main-content { grid-template-columns: 1fr; } }
 
         .input-group { margin-bottom: 15px; }
         label { display: block; font-size: 0.875rem; margin-bottom: 5px; font-weight: 600; }
@@ -124,20 +63,30 @@
             border: none; border-radius: 8px; font-weight: 600; cursor: pointer;
         }
 
-        /* --- Estructura de Gasto con Swipe --- */
-        .expense-list {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-        }
+        /* --- Lista con Swipe Dual --- */
+        .expense-list { background: var(--card-bg); border-radius: 16px; padding: 20px; }
 
         .expense-item-container {
             position: relative;
             margin-bottom: 10px;
             overflow: hidden;
             border-radius: 12px;
-            background: var(--danger); /* Color fondo cuando deslizas */
+            background: #e2e8f0; /* Color neutro de fondo */
         }
+
+        /* Capas de Acción */
+        .action-bg {
+            position: absolute;
+            top: 0; bottom: 0; width: 100%;
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            color: white;
+            z-index: 1;
+        }
+
+        .edit-side { background-color: var(--info); position: absolute; left: 0; top: 0; bottom: 0; width: 50%; display: flex; align-items: center; padding-left: 20px; }
+        .delete-side { background-color: var(--danger); position: absolute; right: 0; top: 0; bottom: 0; width: 50%; display: flex; align-items: center; justify-content: flex-end; padding-right: 20px; }
 
         .expense-item {
             display: flex;
@@ -148,33 +97,15 @@
             border: 1px solid #f1f5f9;
             position: relative;
             z-index: 2;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
             touch-action: pan-x;
-        }
-
-        .delete-action {
-            position: absolute;
-            right: 0; top: 0; bottom: 0;
-            width: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            z-index: 1;
-            cursor: pointer;
         }
 
         .expense-info h4 { font-size: 1rem; }
         .expense-info p { font-size: 0.75rem; color: var(--text-muted); }
-        .expense-value { font-weight: 700; color: var(--danger); margin-right: 10px; }
+        .expense-value { font-weight: 700; color: var(--danger); }
 
-        .btn-delete-desktop {
-            background: none; border: none; color: var(--text-muted);
-            cursor: pointer; padding: 5px; transition: color 0.2s;
-        }
-        .btn-delete-desktop:hover { color: var(--danger); }
-
-        /* --- Modal Estilo Bootstrap --- */
+        /* --- Modal --- */
         .modal-overlay {
             position: fixed; top:0; left:0; width:100%; height:100%;
             background: rgba(0,0,0,0.5); display: none;
@@ -183,51 +114,37 @@
 
         .modal {
             background: white; padding: 25px; border-radius: 16px;
-            width: 90%; max-width: 400px; text-align: center;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-            animation: modalIn 0.3s ease;
+            width: 90%; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
         }
 
-        @keyframes modalIn {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-icon { margin-bottom: 15px; }
         .modal-btn {
-            margin-top: 20px; padding: 10px 20px;
+            margin-top: 20px; padding: 10px;
             background: var(--primary); color: white; border: none;
             border-radius: 8px; cursor: pointer; width: 100%;
         }
-
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Control de Gastos <span style="color: var(--primary);">Enero 2026</span></h1>
+        <h1>Control de Gastos <span style="color: var(--primary);" id="current-month">Enero 2026</span></h1>
     </header>
 
     <div class="summary-grid">
         <div class="card border-fixed">
             <h3>Fijos</h3>
-            <div class="amount" id="sum-fixed">$ 1.627.500</div>
+            <div class="amount" id="sum-fijo">$ 0</div>
         </div>
         <div class="card border-savings">
             <h3>Ahorro</h3>
-            <div class="amount" id="sum-savings">$ 325.500</div>
-        </div>
-        <div class="card border-emergency">
-            <h3>Imprevistos</h3>
-            <div class="amount" id="sum-emergency">$ 0</div>
+            <div class="amount" id="sum-ahorro">$ 0</div>
         </div>
         <div class="card border-wants">
             <h3>Deseos</h3>
-            <div class="amount" id="sum-wants">$ 239.900</div>
+            <div class="amount" id="sum-deseo">$ 0</div>
         </div>
     </div>
-
 
     <div class="main-content">
         <div class="card">
@@ -246,136 +163,186 @@
             </div>
             <div class="input-group">
                 <label>Valor ($)</label>
-                <input type="number" id="val" placeholder="0.00">
+                <input type="number" id="val" placeholder="0">
             </div>
             <button class="btn-main" onclick="addExpense()">Registrar Gasto</button>
         </div>
 
         <div class="expense-list">
-            <h2 style="margin-bottom: 20px;">Gastos Recientes</h2>
-            <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px;" class="mobile-only">(Desliza a la izquierda para borrar en móvil)</p>
-            <div id="expense-container">
-                </div>
+            <h2 style="margin-bottom: 10px;">Gastos Recientes</h2>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px;">
+                → Desliza derecha para <b>Editar</b><br>
+                ← Desliza izquierda para <b>Borrar</b>
+            </p>
+            <div id="expense-container"></div>
         </div>
     </div>
 </div>
 
 <div class="modal-overlay" id="customModal">
     <div class="modal">
-        <div class="modal-icon" id="modalIcon"></div>
         <h3 id="modalTitle">Mensaje</h3>
-        <p id="modalBody" style="color: var(--text-muted); margin-top: 10px;"></p>
-        <button class="modal-btn" onclick="closeModal()">Entendido</button>
+        <div id="modalContent"></div>
+        <button class="modal-btn" onclick="closeModal()">Cerrar</button>
     </div>
 </div>
 
 <script>
-    lucide.createIcons();
+    let expenses = JSON.parse(localStorage.getItem('myExpenses')) || [];
+    let xDown = null;
 
-    // Lógica de Modales
-    function showModal(title, body, type = 'success') {
-        const modal = document.getElementById('customModal');
-        const iconContainer = document.getElementById('modalIcon');
-        
-        document.getElementById('modalTitle').innerText = title;
-        document.getElementById('modalBody').innerText = body;
-        
-        iconContainer.innerHTML = type === 'success' 
-            ? `<i data-lucide="check-circle" color="var(--success)" size="48"></i>`
-            : `<i data-lucide="alert-circle" color="var(--danger)" size="48"></i>`;
-        
+    // Inicializar
+    window.onload = () => {
+        renderExpenses();
         lucide.createIcons();
-        modal.style.display = 'flex';
+    };
+
+    function save() {
+        localStorage.setItem('myExpenses', JSON.stringify(expenses));
+        renderExpenses();
     }
 
-    function closeModal() {
-        document.getElementById('customModal').style.display = 'none';
-    }
-
-    // Agregar Gasto
     function addExpense() {
         const desc = document.getElementById('desc').value;
         const cat = document.getElementById('cat').value;
         const val = document.getElementById('val').value;
 
-        if(!desc || !val) {
-            showModal("Campo incompleto", "Por favor completa la descripción y el valor del gasto.", "error");
-            return;
-        }
+        if(!desc || !val) return alert("Completa los campos");
 
-        const container = document.getElementById('expense-container');
-        const fecha = new Date().toLocaleDateString();
+        const newExpense = {
+            id: Date.now(),
+            desc,
+            cat,
+            val: parseFloat(val),
+            date: new Date().toLocaleDateString()
+        };
 
-        const itemWrapper = document.createElement('div');
-        itemWrapper.className = 'expense-item-container';
-        
-        itemWrapper.innerHTML = `
-            <div class="delete-action" onclick="deleteExpense(this)">
-                <i data-lucide="trash-2"></i>
-            </div>
-            <div class="expense-item" 
-                 ontouchstart="handleTouchStart(event)" 
-                 ontouchmove="handleTouchMove(event)" 
-                 ontouchend="handleTouchEnd(event)">
-                <div class="expense-info">
-                    <h4>${desc}</h4>
-                    <p>${fecha} • ${cat}</p>
-                </div>
-                <div style="display: flex; align-items: center;">
-                    <div class="expense-value">$ ${Number(val).toLocaleString('de-DE')}</div>
-                    <button class="btn-delete-desktop" onclick="deleteExpense(this)">
-                        <i data-lucide="x" size="18"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-
-        container.insertBefore(itemWrapper, container.firstChild);
-        lucide.createIcons();
-
-        // Limpiar
+        expenses.unshift(newExpense);
         document.getElementById('desc').value = '';
         document.getElementById('val').value = '';
-
-        showModal("Gasto registrado", "El gasto se ha añadido correctamente a tu lista.");
+        save();
     }
 
-    function deleteExpense(element) {
-        // Encuentra el contenedor padre y lo elimina
-        const item = element.closest('.expense-item-container');
-        item.style.opacity = '0';
-        item.style.transform = 'translateX(-100px)';
-        setTimeout(() => {
-            item.remove();
-            showModal("Gasto eliminado", "El registro ha sido removido.", "success");
-        }, 300);
+    function renderExpenses() {
+        const container = document.getElementById('expense-container');
+        container.innerHTML = '';
+        
+        let totals = { Fijo: 0, Ahorro: 0, Deseo: 0 };
+
+        expenses.forEach(exp => {
+            totals[exp.cat] += exp.val;
+            
+            const item = document.createElement('div');
+            item.className = 'expense-item-container';
+            item.innerHTML = `
+                <div class="action-bg">
+                    <div class="edit-side"><i data-lucide="edit-3"></i></div>
+                    <div class="delete-side"><i data-lucide="trash-2"></i></div>
+                </div>
+                <div class="expense-item" 
+                     data-id="${exp.id}"
+                     ontouchstart="handleTouchStart(event)" 
+                     ontouchmove="handleTouchMove(event)" 
+                     ontouchend="handleTouchEnd(event)">
+                    <div class="expense-info">
+                        <h4>${exp.desc}</h4>
+                        <p>${exp.date} • ${exp.cat}</p>
+                    </div>
+                    <div class="expense-value">$ ${exp.val.toLocaleString('de-DE')}</div>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+
+        // Actualizar Totales en Cards
+        document.getElementById('sum-fijo').innerText = `$ ${totals.Fijo.toLocaleString('de-DE')}`;
+        document.getElementById('sum-ahorro').innerText = `$ ${totals.Ahorro.toLocaleString('de-DE')}`;
+        document.getElementById('sum-deseo').innerText = `$ ${totals.Deseo.toLocaleString('de-DE')}`;
+        
+        lucide.createIcons();
     }
 
-    // Lógica de SWIPE para móviles
-    let xDown = null;                                                        
-    let currentItem = null;
-
+    // --- Lógica de Swipe ---
     function handleTouchStart(evt) {
-        xDown = evt.touches[0].clientX;                                      
-        currentItem = evt.currentTarget;
-    };                                                
+        xDown = evt.touches[0].clientX;
+    }
 
     function handleTouchMove(evt) {
         if (!xDown) return;
-        let xUp = evt.touches[0].clientX;                                    
+        let xUp = evt.touches[0].clientX;
         let xDiff = xDown - xUp;
+        let element = evt.currentTarget;
 
-        if (xDiff > 50) { // Deslizar izquierda
-            currentItem.style.transform = "translateX(-80px)";
-        } else if (xDiff < -50) { // Deslizar derecha (cancelar)
-            currentItem.style.transform = "translateX(0)";
+        // Limitar el movimiento
+        if (xDiff > 0) { // Hacia la izquierda (Borrar)
+            element.style.transform = `translateX(-${Math.min(xDiff, 80)}px)`;
+        } else { // Hacia la derecha (Editar)
+            element.style.transform = `translateX(${Math.min(Math.abs(xDiff), 80)}px)`;
         }
-    };
+    }
 
-    function handleTouchEnd() {
+    function handleTouchEnd(evt) {
+        let xUp = evt.changedTouches[0].clientX;
+        let xDiff = xDown - xUp;
+        let element = evt.currentTarget;
+        let id = element.getAttribute('data-id');
+
+        if (xDiff > 60) {
+            // Acción Borrar
+            deleteExpense(id);
+        } else if (xDiff < -60) {
+            // Acción Editar
+            openEditModal(id);
+        }
+        
+        element.style.transform = "translateX(0)";
         xDown = null;
-    };
+    }
 
+    function deleteExpense(id) {
+        if(confirm("¿Eliminar este gasto?")) {
+            expenses = expenses.filter(e => e.id != id);
+            save();
+        }
+    }
+
+    function openEditModal(id) {
+        const exp = expenses.find(e => e.id == id);
+        const modal = document.getElementById('customModal');
+        const content = document.getElementById('modalContent');
+        
+        document.getElementById('modalTitle').innerText = "Editar Gasto";
+        content.innerHTML = `
+            <div class="input-group" style="text-align:left; margin-top:15px;">
+                <label>Descripción</label>
+                <input type="text" id="edit-desc" value="${exp.desc}">
+                <label style="margin-top:10px;">Valor ($)</label>
+                <input type="number" id="edit-val" value="${exp.val}">
+            </div>
+            <button class="btn-main" onclick="confirmEdit(${id})">Guardar Cambios</button>
+        `;
+        
+        modal.style.display = 'flex';
+    }
+
+    function confirmEdit(id) {
+        const newDesc = document.getElementById('edit-desc').value;
+        const newVal = document.getElementById('edit-val').value;
+        
+        expenses = expenses.map(e => {
+            if(e.id == id) {
+                return { ...e, desc: newDesc, val: parseFloat(newVal) };
+            }
+            return e;
+        });
+        
+        closeModal();
+        save();
+    }
+
+    function closeModal() {
+        document.getElementById('customModal').style.display = 'none';
+    }
 </script>
 
 </body>
